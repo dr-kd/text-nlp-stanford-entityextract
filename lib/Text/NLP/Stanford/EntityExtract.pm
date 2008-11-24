@@ -12,7 +12,7 @@ Text::NLP::Stanford::EntityExtract - Talks to a stanford-ner socket server to ge
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
@@ -48,7 +48,7 @@ Wrte a script to extract the named entities from the text, like the following:
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head2 METHODS
 
@@ -129,7 +129,6 @@ sub entities_list {
     my $pos = 1;
     foreach my $w (@tagged_words) {
         my ($word, $tag) = $w =~ m{(.*)/(.*)$};
-        $DB::single=1 if $word eq 'Outer';
         if (! $taglist->{$tag}) {
             $taglist->{$tag} = [ ];
         }
@@ -143,6 +142,65 @@ sub entities_list {
     }
     return $taglist;
 }
+
+=head2 list_entities($self->entities_list($line)
+
+Lists the entities contained within a line based from the data
+structure provided by entities_list($line).
+
+If passed a list of entities it adds to that list, including counts of
+the numbes of each entity already found.
+
+The data structure returns looks like this:
+
+ $list_data = {
+    'LOCATION' => {
+        'Outer Mongolia' => 1,
+        'Location Location Location' => 1,
+        'Chinese Mainland' => 1,
+        'Britney' => 1
+    },
+    'O' => {
+        'may have returned from the' => 1,
+        'said from his home in' => 1,
+        '. Test a three word entity' => 1,
+        'faith that she follows . Now she is attempting , for a second time , to persuade' => 1,
+        '. There is a question that' => 1,
+        'blah blah' => 1,
+        'to the controversial' => 1,
+        '.' => 1,
+        'to follow suit , reports said .' => 1
+    },
+    'PERSON' => {
+        'Bruce Lee' => 1,
+        'Gwyneth Paltrow' => 1,
+        'Lord Lucan' => 1
+    },
+    'MISC' => {
+        'Jewish-based' => 1
+    }
+ };
+
+=cut
+
+sub list_entities {
+    my ($self, $data, $list) = @_;
+    $list ||= {};
+    foreach my $d (keys %$data) {
+        $list->{$d} = { };
+        foreach my $l ($data->{$d}) {
+            for my $i ( 0 .. $#{$l}) {
+                my $words = $l->[$i];
+                my $firstword = $words->[0];
+                my $entity = $firstword;
+                map { $entity .= ' ' . $words->[$_]->[0] } (2 .. $#$words);
+                $list->{$d}->{$entity}++;
+            }
+        }
+    }
+    return $list;
+}
+
 
 =head1 AUTHOR
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use YAML;
 
 BEGIN {
@@ -37,6 +37,37 @@ $data = {
       };
 
 is_deeply($ner->entities_list($tagged_text), $data, "got expected taglist");
+
+my $list_data = {
+    'LOCATION' => {
+        'Outer Mongolia' => 1,
+        'Location Location Location' => 1,
+        'Chinese Mainland' => 1,
+        'Britney' => 1
+    },
+    'O' => {
+        'may have returned from the' => 1,
+        'said from his home in' => 1,
+        '. Test a three word entity' => 1,
+        'faith that she follows . Now she is attempting , for a second time , to persuade' => 1,
+        '. There is a question that' => 1,
+        'blah blah' => 1,
+        'to the controversial' => 1,
+        '.' => 1,
+        'to follow suit , reports said .' => 1
+    },
+    'PERSON' => {
+        'Bruce Lee' => 1,
+        'Gwyneth Paltrow' => 1,
+        'Lord Lucan' => 1
+    },
+    'MISC' => {
+        'Jewish-based' => 1
+    }
+};
+
+is_deeply($ner->list_entities($data), $list_data, "got expected list of entities");
+
 
 
 __DATA__
