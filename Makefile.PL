@@ -6,6 +6,7 @@ author   'Kieren Diment <zarquon@cpan.org>';
 license  'GPL';
 
 build_requires 'Test::More';
+requires 'Mouse';
 
 auto_install;
 
