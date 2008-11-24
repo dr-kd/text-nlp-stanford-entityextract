@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-use Test::More qw/no_plan/;
+use Test::More tests => 4;
 use YAML;
 
 BEGIN {

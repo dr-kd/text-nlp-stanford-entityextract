@@ -16,12 +16,57 @@ Version 0.01
 
 =cut
 
+=head1 Quick Start:
+
+=over
+
+=item *
+
+Grab the Stanford Named Entity recogniser from http://nlp.stanford.edu/ner/index.shtml.
+
+=item *
+
+Run the server, something like as follows:
+
+ java -server -mx400m -cp stanford-ner.jar edu.stanford.nlp.ie.NERServer -loadClassifier classifiers/ner-eng-ie.crf-4-conll-distsim.ser.gz 1234
+
+=item *
+
+Wrte a script to extract the named entities from the text, like the following:
+
+ #!/usr/bin/env perl -w
+ use strict;
+ use Text::NLP::Stanford::EntityExtract;
+ my $ner = Text::NLP::Stanford::EntityExtract->new;
+ my $server = $ner->server;
+ my @txt = ("Some text\n\n", "Treated as \\n\\n delimieted paragraphs");
+ my @tagged_text = $ner->get_entities(@txt);
+ my $entities = $ner->entities_list($txt[0]); # rather complicated
+                                              # @AOA based data
+                                              # structure for further
+                                              # processing
+
+=cut
+
 our $VERSION = '0.01';
 
+=head2 METHODS
+
+=head2 new ( host => '127.0.0.1', port => '1234');
+
+=cut
 
 has 'host' => (is => 'ro', isa => 'Str', default => '127.0.0.1');
 has 'port' => (is => 'ro', isa => 'Int', default => '1234');
 
+
+=head2 server
+
+Gets the socket connection.  I think that the ner server will only do
+one line per connection, so you want a new connection for every line
+of text.
+
+=cut
 
 sub server {
     my ($self) = @_;
@@ -33,6 +78,13 @@ sub server {
     return $sock;
 }
 
+=head2 get_entities(@txt)
+
+Grabs the tagged text for an arbitrary number of paragraphs of text,
+and returns as the ner tagged text.
+
+=cut
+
 sub get_entities {
     my ($self, @txt) = @_;
     my @result;
@@ -43,6 +95,13 @@ sub get_entities {
     return @result;
 }
 
+=head2 _process_line ($line)
+
+processes a single line of text to tagged text
+
+=cut
+
+
 sub _process_line {
     my ($self, $line) = @_;
     my $server = $self->server;
@@ -50,6 +109,17 @@ sub _process_line {
     my $tagged_txt =  <$server>;
     return $tagged_txt;
 }
+
+=head2 entities_list($tagged_line)
+
+returns a rater arcane data structure of the entities from the text.
+the position of the word in the line is recorded as is the entity
+type, so that the line of text can be recovered in full from the data
+structure.
+
+TODO:  This needs some utility subs around it to make it more useful.
+
+=cut
 
 sub entities_list {
     my ($self, $line) = @_;
