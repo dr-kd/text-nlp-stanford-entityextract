@@ -7,6 +7,7 @@ license  'GPL';
 
 build_requires 'Test::More';
 requires 'Mouse';
+requires 'Text::Unidecode';
 
 auto_install;
 

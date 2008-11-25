@@ -1,5 +1,8 @@
 Revision history for Text-NLP-Stanford-EntityExtract
 
+0.05   Wed 25th Nov 2008
+         - Workaround server unicode issues with Text::Unidecode
+
 0.04   Wed 25th Nov 2008
           - Fixed pod coverage failures
 

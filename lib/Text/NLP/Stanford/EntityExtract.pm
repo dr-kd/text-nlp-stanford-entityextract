@@ -4,6 +4,8 @@ use warnings;
 use strict;
 
 use Mouse;
+use utf8;
+use Text::Unidecode;
 use IO::Socket;
 
 =head1 NAME
@@ -12,7 +14,7 @@ Text::NLP::Stanford::EntityExtract - Talks to a stanford-ner socket server to ge
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =cut
 
@@ -39,7 +41,7 @@ Wrte a script to extract the named entities from the text, like the following:
  use Text::NLP::Stanford::EntityExtract;
  my $ner = Text::NLP::Stanford::EntityExtract->new;
  my $server = $ner->server;
- my @txt = ("Some text\n\n", "Treated as \\n\\n delimieted paragraphs");
+ my @txt = ("Some text\n\n", "Treated as \\n\\n delimited paragraphs");
  my @tagged_text = $ner->get_entities(@txt);
  my $entities = $ner->entities_list($txt[0]); # rather complicated
                                               # @AOA based data
@@ -50,7 +52,7 @@ Wrte a script to extract the named entities from the text, like the following:
 
 =cut
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 =head2 METHODS
 
@@ -91,6 +93,7 @@ sub get_entities {
     my ($self, @txt) = @_;
     my @result;
      foreach my $t (@txt) {
+         $t = unidecode($t);
          $t =~ s/\n/ /mg;
          push @result, $self->_process_line($t);
      }
