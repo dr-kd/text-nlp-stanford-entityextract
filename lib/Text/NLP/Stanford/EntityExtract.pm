@@ -12,7 +12,7 @@ Text::NLP::Stanford::EntityExtract - Talks to a stanford-ner socket server to ge
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
@@ -46,9 +46,11 @@ Wrte a script to extract the named entities from the text, like the following:
                                               # structure for further
                                               # processing
 
+=back
+
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head2 METHODS
 
@@ -143,7 +145,7 @@ sub entities_list {
     return $taglist;
 }
 
-=head2 list_entities($self->entities_list($line)
+=head2 list_entities ($self->entities_list($line)
 
 Lists the entities contained within a line based from the data
 structure provided by entities_list($line).
