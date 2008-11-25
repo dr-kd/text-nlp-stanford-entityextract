@@ -1,5 +1,10 @@
 Revision history for Text-NLP-Stanford-EntityExtract
 
+0.04   Wed 25th Nov 2008
+          - Fixed pod coverage failures
+
+0.03   Wed 25th Nov 2008
+         - README file and source control info added to docs
 
 0.02    Wed 25th November 2008
           - Add some functions to make entity extraction a bit more useful.     
