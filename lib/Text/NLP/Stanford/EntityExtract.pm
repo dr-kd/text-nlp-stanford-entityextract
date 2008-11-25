@@ -214,6 +214,8 @@ automatically be notified of progress on your bug as I make changes.
 
 =head1 SUPPORT
 
+The git repository for this code is available from git://github.com/singingfish/text-nlp-stanford-entityextract.git
+
 You can find documentation for this module with the perldoc command.
 
     perldoc Text::NLP::Stanford::EntityExtract
