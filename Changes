@@ -1,5 +1,9 @@
 Revision history for Text-NLP-Stanford-EntityExtract
 
-0.01    Date/time
+
+0.02    Wed 25th November 2008
+          - Add some functions to make entity extraction a bit more useful.     
+
+0.01    Tue 24th November 2008
         First version, released on an unsuspecting world.
 
