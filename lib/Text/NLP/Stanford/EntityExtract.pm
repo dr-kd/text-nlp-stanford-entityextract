@@ -14,7 +14,7 @@ Text::NLP::Stanford::EntityExtract - Talks to a stanford-ner socket server to ge
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
@@ -52,17 +52,20 @@ Wrte a script to extract the named entities from the text, like the following:
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 =head2 METHODS
 
-=head2 new ( host => '127.0.0.1', port => '1234');
+=head2 new ( host => '127.0.0.1', port => '1234' debug => 0|1|2);
+
+The debug flag warns the length of the text sent to the server if set
+to 1 and shows the actual text as well as the length if set to > 1.
 
 =cut
 
 has 'host' => (is => 'ro', isa => 'Str', default => '127.0.0.1');
 has 'port' => (is => 'ro', isa => 'Int', default => '1234');
-
+has 'debug' => (is => 'rw', isa > 'Int', 'default' => undef);
 
 =head2 server
 
@@ -93,8 +96,11 @@ sub get_entities {
     my ($self, @txt) = @_;
     my @result;
      foreach my $t (@txt) {
+         warn "LENGTH: ", length($t), "\n" if $self->debug > 0;
+         warn "TEXT: ", $t, "\n" if $self->debug > 1;
          $t = unidecode($t);
          $t =~ s/\n/ /mg;
+         $t =~ s/[^[:ascii:]]//mg;
          push @result, $self->_process_line($t);
      }
     return @result;
