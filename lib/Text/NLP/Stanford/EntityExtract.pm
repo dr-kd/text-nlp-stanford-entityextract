@@ -63,9 +63,9 @@ to 1 and shows the actual text as well as the length if set to > 1.
 
 =cut
 
-has 'host' => (is => 'ro', isa => 'Str', default => '127.0.0.1');
-has 'port' => (is => 'ro', isa => 'Int', default => '1234');
-has 'debug' => (is => 'rw', isa > 'Int', 'default' => undef);
+has 'host'  => (is => 'ro', isa => 'Str', default => '127.0.0.1');
+has 'port'  => (is => 'ro', isa => 'Int', default => '1234');
+has 'debug' => (is => 'rw', isa => 'Int', default => 0);
 
 =head2 server
 
@@ -96,8 +96,8 @@ sub get_entities {
     my ($self, @txt) = @_;
     my @result;
      foreach my $t (@txt) {
-         warn "LENGTH: ", length($t), "\n" if $self->debug > 0;
-         warn "TEXT: ", $t, "\n" if $self->debug > 1;
+         warn "LENGTH: " . length($t) .  "\n" if $self->debug > 0;
+         warn "TEXT: " .  $t . "\n" if $self->debug > 1;
          $t = unidecode($t);
          $t =~ s/\n/ /mg;
          $t =~ s/[^[:ascii:]]//mg;

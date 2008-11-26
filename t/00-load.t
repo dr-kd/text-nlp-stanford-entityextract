@@ -12,7 +12,7 @@ diag "set env var NLR_SERVER to run live tests against the stanford.nlr server r
 my $ner = Text::NLP::Stanford::EntityExtract->new;
 
 SKIP: {
-    skip "only test for the server if the server env var is set", 1,  if ! $ENV{NLR_SERVER};
+    skip "only test for the server if the server env var is set", 1 unless $ENV{NLR_SERVER};
     ok($ner->server, 'got the server ok');
 }
 
@@ -114,12 +114,15 @@ my $doclist = {
 
 
 my @res = $ner->get_entities(@txt);
-ok(scalar(@res), 'Defined result.  A silly test, because the NLP ER recogniser is probably non-deterministic');
+SKIP: {
+    skip "another test that requires a server", 1 unless   $ENV{NLR_SERVER};
+    ok(scalar(@res), 'Defined result.  A silly test, because the NLP ER recogniser is probably non-deterministic');
+}
 is_deeply($ner->entities_list($tagged_text), $data, "got expected taglist");
 is_deeply($ner->list_entities($data), $list_data, "got expected list of entities");
 
 SKIP: {
-    skip "the result from this test is non-deterministic due to training differences and other server implementation details", 1,  if ! $ENV{NLR_SERVER};
+    skip "the result from this test is non-deterministic due to training differences and other server implementation details", 1 unless   $ENV{NLR_SERVER};
     my $ents = $ner->list_entities($ner->entities_list(join ("\n", @res)));
 
     is_deeply($ents, $doclist, "got entitiy list for whole document");
