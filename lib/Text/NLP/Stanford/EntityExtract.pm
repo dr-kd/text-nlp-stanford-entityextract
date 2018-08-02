@@ -7,6 +7,7 @@ use Mouse;
 use utf8;
 use Text::Unidecode;
 use IO::Socket;
+use Data::Dumper qw(Dumper);
 
 =head1 NAME
 
@@ -98,9 +99,11 @@ sub get_entities {
      foreach my $t (@txt) {
          warn "LENGTH: " . length($t) .  "\n" if $self->debug > 0;
          warn "TEXT: " .  $t . "\n" if $self->debug > 1;
-         $t = unidecode($t);
+
+         #$t = unidecode($t);
+         utf8::decode($t);
          $t =~ s/\n/ /mg;
-         $t =~ s/[^[:ascii:]]//mg;
+         #$t =~ s/[^[:ascii:]]//mg;
          push @result, $self->_process_line($t);
      }
     return @result;
@@ -116,9 +119,10 @@ processes a single line of text to tagged text
 sub _process_line {
     my ($self, $line) = @_;
     my $server = $self->server;
+    utf8::encode($line);
     print $server $line,"\n";
-    my $tagged_txt =  <$server>;
-    return $tagged_txt;
+    my @tagged_txt =  <$server>;
+    return \@tagged_txt;
 }
 
 =head2 entities_list($tagged_line)
@@ -133,23 +137,25 @@ TODO:  This needs some utility subs around it to make it more useful.
 =cut
 
 sub entities_list {
-    my ($self, $line) = @_;
-    my @tagged_words = split /\s+/, $line;
-    my $last_tag = '';
+    my ($self, $lines) = @_;
     my $taglist = {};
-    my $pos = 1;
-    foreach my $w (@tagged_words) {
-        my ($word, $tag) = $w =~ m{(.*)/(.*)$};
-        if (! $taglist->{$tag}) {
-            $taglist->{$tag} = [ ];
-        }
-        if ($tag ne $last_tag) {
-            push @{$taglist->{$tag}}, [$word, $pos++];
-        }
-        else {
-            push @{ $taglist->{$tag}->[ $#{ $taglist->{$tag}} ] }, [$word, $pos++];
-        }
-        $last_tag = $tag;
+    foreach my $line (@$lines) { 
+      my @tagged_words = split /\s+/, $line;
+      my $last_tag = '';
+      my $pos = 1;
+      foreach my $w (@tagged_words) {
+          my ($word, $tag) = $w =~ m{(.*)/(.*)$};
+          if (! $taglist->{$tag}) {
+              $taglist->{$tag} = [ ];
+          }
+          if ($tag ne $last_tag) {
+              push @{$taglist->{$tag}}, [$word, $pos++];
+          }
+          else {
+              push @{ $taglist->{$tag}->[ $#{ $taglist->{$tag}} ] }, [$word, $pos++];
+          }
+          $last_tag = $tag;
+      }
     }
     return $taglist;
 }
