@@ -1,5 +1,6 @@
 package Text::NLP::Stanford::EntityExtract;
 
+
 use warnings;
 use strict;
 
@@ -12,12 +13,6 @@ use Data::Dumper qw(Dumper);
 =head1 NAME
 
 Text::NLP::Stanford::EntityExtract - Talks to a stanford-ner socket server to get named entities back
-
-=head1 VERSION
-
-Version 0.07
-
-=cut
 
 =head1 Quick Start:
 
@@ -50,10 +45,6 @@ Wrte a script to extract the named entities from the text, like the following:
                                               # processing
 
 =back
-
-=cut
-
-our $VERSION = '0.07';
 
 =head2 METHODS
 
