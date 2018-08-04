@@ -3,7 +3,7 @@ package Text::NLP::Stanford::EntityExtract;
 use warnings;
 use strict;
 
-use Mouse;
+use Moo;
 use utf8;
 use Text::Unidecode;
 use IO::Socket;
@@ -63,9 +63,9 @@ to 1 and shows the actual text as well as the length if set to > 1.
 
 =cut
 
-has 'host'  => (is => 'ro', isa => 'Str', default => '127.0.0.1');
-has 'port'  => (is => 'ro', isa => 'Int', default => '1234');
-has 'debug' => (is => 'rw', isa => 'Int', default => 0);
+has 'host'  => (is => 'ro',  default => '127.0.0.1');
+has 'port'  => (is => 'ro',  default => '1234');
+has 'debug' => (is => 'rw',  default => 0);
 
 =head2 server
 
