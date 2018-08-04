@@ -14,7 +14,7 @@ Text::NLP::Stanford::EntityExtract - Talks to a stanford-ner socket server to ge
 
 =head1 VERSION
 
-Version 0.06
+Version 0.07
 
 =cut
 
@@ -52,7 +52,7 @@ Wrte a script to extract the named entities from the text, like the following:
 
 =cut
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 =head2 METHODS
 
