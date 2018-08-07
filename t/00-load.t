@@ -7,8 +7,9 @@ BEGIN {
 	use_ok( 'Text::NLP::Stanford::EntityExtract' );
 }
 
+
 diag( "Testing Text::NLP::Stanford::EntityExtract $Text::NLP::Stanford::EntityExtract::VERSION, Perl $], $^X" );
-diag "set env var NLR_SERVER to run live tests against the stanford.nlr server running on 127.0.0.1 port 1234" if ! $ENV{NLR_SERVER};
+diag "set env var NLR_SERVER to run live tests against the stanford.nlr server running on 127.0.0.1 port 4465" if ! $ENV{NLR_SERVER};
 my $ner = Text::NLP::Stanford::EntityExtract->new;
 
 SKIP: {
@@ -24,7 +25,8 @@ my @txt;
  @txt = <DATA>;
 }
 
-my $tagged_text = "blah/O blah/O Gwyneth/PERSON Paltrow/PERSON to/O the/O controversial/O Jewish-based/MISC faith/O that/O she/O follows/O ./O Now/O she/O is/O attempting/O ,/O for/O a/O second/O time/O ,/O to/O persuade/O Britney/LOCATION to/O follow/O suit/O ,/O reports/O said/O ./O Bruce/PERSON Lee/PERSON said/O from/O his/O home/O in/O Outer/LOCATION Mongolia/LOCATION ./O There/O is/O a/O question/O that/O Lord/PERSON Lucan/PERSON may/O have/O returned/O from/O the/O Chinese/LOCATION Mainland/LOCATION ./O Test/O a/O three/O word/O entity/O Location/LOCATION Location/LOCATION Location/LOCATION ./O";
+
+my @tagged_text = [ "blah/O blah/O Gwyneth/PERSON Paltrow/PERSON to/O the/O controversial/O Jewish-based/MISC faith/O that/O she/O follows/O ./O Now/O she/O is/O attempting/O ,/O for/O a/O second/O time/O ,/O to/O persuade/O Britney/LOCATION to/O follow/O suit/O ,/O reports/O said/O ./O Bruce/PERSON Lee/PERSON said/O from/O his/O home/O in/O Outer/LOCATION Mongolia/LOCATION ./O There/O is/O a/O question/O that/O Lord/PERSON Lucan/PERSON may/O have/O returned/O from/O the/O Chinese/LOCATION Mainland/LOCATION ./O Test/O a/O three/O word/O entity/O Location/LOCATION Location/LOCATION Location/LOCATION ./O" ];
 
 $data = {
           'LOCATION' =>
@@ -113,12 +115,12 @@ my $doclist = {
         };
 
 
-my @res = $ner->get_entities(@txt);
+my @res = $ner->get_entities(@tagged_text);
 SKIP: {
     skip "another test that requires a server", 1 unless   $ENV{NLR_SERVER};
     ok(scalar(@res), 'Defined result.  A silly test, because the NLP ER recogniser is probably non-deterministic');
 }
-is_deeply($ner->entities_list($tagged_text), $data, "got expected taglist");
+is_deeply($ner->entities_list(@tagged_text), $data, "got expected taglist");
 is_deeply($ner->list_entities($data), $list_data, "got expected list of entities");
 
 SKIP: {

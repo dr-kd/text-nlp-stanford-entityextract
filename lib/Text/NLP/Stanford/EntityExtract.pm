@@ -31,7 +31,9 @@ Grab the Stanford Named Entity recogniser from http://nlp.stanford.edu/ner/index
 
 Run the server, something like as follows:
 
- java -server -mx400m -cp stanford-ner.jar edu.stanford.nlp.ie.NERServer -loadClassifier classifiers/ner-eng-ie.crf-4-conll-distsim.ser.gz 1234
+ java -server -mx400m -cp stanford-ner.jar edu.stanford.nlp.ie.NERServer -loadClassifier classifiers/english.all.3class.distsim.crf.ser.gz -port 1234
+
+By default, the server defaults to running on port 4465.
 
 =item *
 
@@ -44,7 +46,7 @@ Wrte a script to extract the named entities from the text, like the following:
  my $server = $ner->server;
  my @txt = ("Some text\n\n", "Treated as \\n\\n delimited paragraphs");
  my @tagged_text = $ner->get_entities(@txt);
- my $entities = $ner->entities_list($txt[0]); # rather complicated
+ my $entities = $ner->entities_list(@txt);    # rather complicated
                                               # @AOA based data
                                               # structure for further
                                               # processing
@@ -60,12 +62,13 @@ our $VERSION = '0.06';
 =head2 new ( host => '127.0.0.1', port => '1234' debug => 0|1|2);
 
 The debug flag warns the length of the text sent to the server if set
-to 1 and shows the actual text as well as the length if set to > 1.
+to 1 and shows the actual text as well as the length if set to > 1. The
+port number defaults to C<4465>.
 
 =cut
 
 has 'host'  => (is => 'ro', isa => 'Str', default => '127.0.0.1');
-has 'port'  => (is => 'ro', isa => 'Int', default => '1234');
+has 'port'  => (is => 'ro', isa => 'Int', default => '4465');
 has 'debug' => (is => 'rw', isa => 'Int', default => 0);
 
 =head2 server
